@@ -1,5 +1,8 @@
+'use strict'
 const User = require('../models/user');
 const assign = require('object-assign');
+const jwt = require('jwt-simple');
+const config = require('../../system/config');
 
 exports.load = (req, res, next, idUser) => {
     User.findOne({_id: req.params.idUser}, function(err, user){
@@ -50,3 +53,24 @@ exports.delete = (req, res) => {
         return res.json({'success': 'false', 'msg': 'This user does not exists anymore!!'})
     }
 };
+
+exports.auth  = (req, res) => {
+    User.findOne({
+        email: req.body.email
+    }, function(err, user){
+        if(err) return console.log(err);
+        if(!user){
+            return res.json({success: false, 'msg': 'Auth failed, User not found'});
+        }else{
+            user.comparePassword(req.body.password, (err, isMatch) => {
+                if(isMatch && !err){
+                    let token = jwt.encode(user, config.SECRET);
+                    return res.json({'success': true, token: token});
+                }else{
+                    return res.json({'success': false, msg: 'Auth failed, Wrong password'});
+                }
+            })
+        }
+    })
+};
+

@@ -5,17 +5,19 @@ const UserController = require('../app/controllers/user-controller');
 const ArticleController = require('../app/controllers/article-controller');
 const AboutController = require('../app/controllers/about-controller');
 const TagController = require('../app/controllers/tag-controller');
+const Auth = require('./middleware/auth');
 
 Router.get('/', (req, res) => {
     res.json({'success': 'true', 'msg' : 'Home Api'});
 })
 
 Router.param('idUser', UserController.load);
-Router.get('/users', UserController.index);
+Router.get('/users', Auth.requireLogin, UserController.index);
 Router.post('/users/register', UserController.store);
 Router.get('/users/:idUser', UserController.show);
 Router.put('/users/:idUser', UserController.update);
 Router.delete('/users/:idUser', UserController.delete);
+Router.post('/users/auth', UserController.auth);
 
 Router.param('idProfile', AboutController.load);
 Router.get('/profile', AboutController.index);
