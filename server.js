@@ -12,8 +12,8 @@ const passport = require('passport');
 require('./system/database')(config);
 require('./system/passport')(passport, config);
 
-var whitelist = ['http://devroad.tmdev.com.br', '*'];
-var corsOptions = {
+const whitelist = ['http://devroad.tmdev.com.br', '*'];
+const corsOptions = {
     origin: function(origin, callback){
         let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
