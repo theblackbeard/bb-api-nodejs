@@ -4,7 +4,7 @@ const assign = require('object-assign');
 
 exports.load = (req, res, next, name) => {
     Article.findOne({name: req.params.name}, function(err, article){
-        if(err) return next(res.json({'success': 'false' , 'message': 'Article not found!'}));
+        if(err) return next(res.json({'success': false , 'message': 'Article not found!'}));
         req.article = article;
         next();
     })
@@ -15,13 +15,13 @@ exports.index = (req, res) => {
     Article.find(req.query.q,(err, articles) =>{
         if(err) console.log(err);
         if(articles.length == 0) articles = 'No Articles Found!';
-        return res.json({'success': 'true', 'articles': (articles || 'No Articles Found!')});
+        return res.json({'success': true, 'articles': (articles || 'No Articles Found!')});
     })
 }
 
 exports.show = (req, res) => {
     const article = req.article || 'Article not found!!';
-    return res.json({'success': 'true', 'article': article});
+    return res.json({'success': true, 'article': article});
 };
 
 exports.name = (req, res) => {
@@ -36,8 +36,8 @@ exports.store = (req, res) => {
     if(Object.keys(article.tags).length==0) article.tags = 'uncategorized';
     article.author = req.user
     Article.create(article, (err, result) => {
-    if(err) return res.json({'success': 'false', 'msg': (err.errors || err.errmsg) });
-       return res.json({'success': 'true', 'msg': 'Article Created Successfuly!', 'data': result});
+    if(err) return res.json({'success': false, 'msg': (err.errors || err.errmsg) });
+       return res.json({'success': true, 'msg': 'Article Created Successfuly!', 'data': result});
     })
 };
 
@@ -51,8 +51,8 @@ exports.update = (req, res) => {
 
     assign(oldArticleData, editArticle);
     oldArticleData.save((err, result)=>{
-        if(err) return res.json({'success': 'false',  'msg': err});
-        return res.json({'success': 'true', 'msg': 'Article Updated Successfuly', 'data': result })
+        if(err) return res.json({'success': false,  'msg': err});
+        return res.json({'success': true, 'msg': 'Article Updated Successfuly', 'data': result })
     })
 };
 
@@ -61,10 +61,10 @@ exports.delete = (req, res) => {
     if(article){
         article.remove((err) => {
             if(err) return res.json({'success': 'false', 'msg': err});
-            return res.json({'success': 'true', 'msg': 'Article deleted successfuly!'});
+            return res.json({'success': true, 'msg': 'Article deleted successfuly!'});
         })
     }else{
-        return res.json({'success': 'false', 'msg': 'This Article does not exists anymore!'})
+        return res.json({'success': false, 'msg': 'This Article does not exists anymore!'})
     }
 };
 
@@ -74,10 +74,10 @@ exports.changeCs = (req, res) => {
     if(article && option){
         Article.changeCS(article.name, option, (err, result) => {
             if(err) return res.json({'success': 'false', 'msg': err});
-            return res.json({'success': 'true', 'msg': 'Article Status Changed!', 'data': result});
+            return res.json({'success': true, 'msg': 'Article Status Changed!', 'data': result});
         })
     }else{
-        return res.json({'success': 'false', 'msg': 'This Article does not exists anymore!'})
+        return res.json({'success': false, 'msg': 'This Article does not exists anymore!'})
     }
 };
 
@@ -86,9 +86,9 @@ exports.plusView = (req, res) => {
     if(article){
         Article.plusView(article.name, (err, result) => {
             if(err) return res.json({'success': 'false', 'msg': err});
-            return res.json({'success': 'true', 'msg': 'Article Viewed', 'data': result});
+            return res.json({'success': true, 'msg': 'Article Viewed', 'data': result});
         });
     }else{
-        return res.json({'success': 'false', 'msg': 'This Article does not exists anymore!'})
+        return res.json({'success': false, 'msg': 'This Article does not exists anymore!'})
     }
 }

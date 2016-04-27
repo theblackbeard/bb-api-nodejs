@@ -28,7 +28,7 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     }
-})
+});
 
 UserSchema.pre('save', function(next) {
     var user = this;
