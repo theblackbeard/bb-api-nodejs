@@ -5,5 +5,5 @@ module.exports = {
     'MONGO': process.env.MONGODB_URL,// || 'mongodb://127.0.0.1:27017/',
     'MONGODB': 'blackbeard',
     'ROOT' : path.join(__dirname, '..'),
-    'SECRET': 'carlosmateuscarvalhomoraemsaopaulo'
+    'SECRET': ''
 }
