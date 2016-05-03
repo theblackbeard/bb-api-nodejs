@@ -12,16 +12,10 @@ const passport = require('passport');
 require('./system/database')(config);
 require('./system/passport')(passport, config);
 
-const whitelist = ['http://devroad.tmdev.com.br', '*'];
-const corsOptions = {
-    origin: function(origin, callback){
-        let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-        callback(null, originIsWhitelisted);
-    }
-};
 app.use(helmet());
-app.use(cors(corsOptions));
 app.use(security.policy);
+app.use(cors({origin: 'http://seu-site.com.br'}));
+//app.use(cors({origin: '*'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -30,8 +24,6 @@ app.use(passport.initialize());
 app.listen(config.PORTSERVER, config.IPSERVER, () => {
     console.log('Server Running on ' , config.IPSERVER + ': ' + config.PORTSERVER);
 });
-
-
 
 
 
